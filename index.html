@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <!-- Optional: link to a custom CSS file -->
+    <title>News App</title>
+</head>
+<body style="background-color: #e9ecef;"> <!-- Light grey background -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Latest News Articles</h1>
+        <div class="input-group mb-3">
+            <select id="category" class="custom-select">
+                <option value="">Select a category</option>
+                <option value="business">Business</option>
+                <option value="technology">Technology</option>
+                <option value="sports">Sports</option>
+                <option value="health">Health</option>
+                <option value="entertainment">Entertainment</option>
+                <!-- Add more categories as needed -->
+            </select>
+            <div class="input-group-append">
+                <button id="fetchNews" class="btn btn-primary">Fetch News</button>
+            </div>
+        </div>
+        
+        <div id="loading" class="text-center" style="display: none;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <div id="newsContainer" class="row mt-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('fetchNews').addEventListener('click', async () => {
+            const category = document.getElementById('category').value;
+            const loadingIndicator = document.getElementById('loading');
+            const newsContainer = document.getElementById('newsContainer');
+
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            newsContainer.innerHTML = ''; // Clear previous results
+
+            try {
+                const response = await fetch(`/search?category=${category}`);
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error);
+                    return;
+                }
+
+                const data = await response.json();
+                displayNews(data);
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                alert('An error occurred while fetching news.');
+            } finally {
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+            }
+        });
+
+        function displayNews(data) {
+            const newsContainer = document.getElementById('newsContainer');
+
+            data.results.forEach(article => {
+                const articleElement = document.createElement('div');
+                articleElement.classList.add('col-md-4', 'mb-4');
+                articleElement.innerHTML = `
+                    <div class="card shadow-sm h-100">
+                        <img src="${article.image_url || 'https://via.placeholder.com/300'}" class="card-img-top" alt="${article.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${article.title}</h5>
+                            <p class="card-text">${article.description || 'No description available.'}</p>
+                            <a href="${article.link}" class="btn btn-primary" target="_blank">Read More</a>
+                        </div>
+                    </div>
+                `;
+                newsContainer.appendChild(articleElement);
+            });
+        }
+    </script>
+</body>
+</html>
