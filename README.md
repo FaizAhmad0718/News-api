@@ -3,6 +3,8 @@ A RESTful API built with Node.js and Express, designed to manage user data and a
 
 This project features a dynamic web application built using HTML, CSS, and Bootstrap. The design emphasizes responsive layouts and user-friendly interfaces, showcasing modern web development practices. Ideal for demonstrating front-end skills and creating visually appealing pages.
 
+// Updated code in master branch
+
 // nodejs version 
 v14.21.3
 
