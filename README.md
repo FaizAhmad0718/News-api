@@ -18,3 +18,9 @@ v14.21.3
 // run project command
 step1 - npm i
 step2 - npm run dev
+
+// postman url to hit this api
+localhost:3000/search?category=technology
+
+// for UI 
+If you want to see the UI part, open Chrome and paste this URL: http://localhost:3000
